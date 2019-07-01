@@ -1,32 +1,67 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+#include <cstdlib>
+#include <stdlib.h>
+#include <iostream>
+ using namespace std;
+ 
+ struct objeto{
+ 	double peso;
+ 	double valor;
+ 	double valorpeso;
+ 	double tomado;
+ };
+objeto objetos[5];
+double solucion[]={0,0,0,0,0};
+int seleccionVoraz(){
+	double mayor =-1;
+	int indice=-1, j=0;
+	
+	for(int j=0;j<5;j++){
+		if(!objetos[j].tomado && (mayor<objetos[j].valorpeso)){
+			mayor=objetos[j].valorpeso;
+			indice=j;
+		};
+	};
+	return indice;
+};
+double valortotal(){
+	double valor=0;
+	
+	for(int i=0;i<5;i++)
+	   valor=valor+objetos[i].valor*solucion[i];
+	return valor;
+};
+    int main (int argc, char *argv[]){
+		double pesomax,suma=0;
+		int i;
+		for(i=0;i<5;i++){
+			cout<<"peso del objeto "<<i+1<<" =\n";
+			cin>>objetos[i].peso;
+			cout<<"valor del objeto "<<i+1<<" =\n";
+			cin>>objetos[i].valor;
+			objetos[i].valorpeso=objetos[i].valor/objetos[i].peso;
+			objetos[i].tomado=false;
+	};
+	cout<<"peso amximo de la mochila "; cin>>pesomax;
+		
+		while(suma<pesomax){
+			i=seleccionVoraz();
+			
+			if((suma+objetos[i].peso)<pesomax){
+				solucion[i]=1;
+				suma=suma+objetos[i].peso;
+				objetos[i].tomado=true;
+			}
+			else{
+				solucion[i]=(pesomax-suma)/objetos[i].peso;
+				suma=pesomax;
+			};
+		};
+		cout<<"el valor obtenido maximo es:"<<valortotal()<<endl;
+		cout<<" y el vectoor solucion es: \n";
+		
+		for(i=0;i<5;i++)
+		   cout<<" "<<solucion[i]<<", ";
+		
+		system("pause");
+		return EXIT_SUCCESS;
+}
